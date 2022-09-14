@@ -2,49 +2,28 @@
 class farm
 {
 	//Массивы животных
-	private $animalTypes = array(0=>"cow",
-								 1=>"chicken");
-
-								//Т.к каждое животное должно иметь свой номер - создаем массив чисел
-	private $arrayOfAnimals=array("cow"=> array(),
-								  "chicken"=>array());
+	private $animalTypes = array();
+	private $arrayOfAnimals=array();
 
 	//массивы таймингов по добыче продукта(яйца, мясо, молоко и т.д)
     //Пусть 1 цикл = 1 день
-    private $productTypes=array(0=>"milk",
-								1=>"egg");
-    private $countProduct=array("milk"=> 0,
-								"egg"=> 0);
+    private $productTypes=array();
+    private $countProduct=array();
 
-    private $productPerCycle=array("milk"=>[8,12],
-								   "egg"=>[0,1]);
-    private $productAndAnimal=array("cow"=>"milk",
-									"chicken"=>"egg");
+    private $productPerCycle=array();
+    private $productAndAnimal=array();
 
     //Еще пару массивов чтобы сделать единицы измерения продуктов и вывод на русский язык(Чисто для удобства, можно и без этого)
 
-    private $unitOfMessure=array("milk"=>"Литров",
-								 "egg"=>"Штук");
-    private $rusAnimal=array("cow"=>"Коров",
-    						 "chicken"=>"Куриц");
-    private $rusProduct=array("milk"=>"Молоко",
-							  "egg"=>"Яйца");
+    private $unitOfMessure=array();
+    private $rusAnimal=array();
+    private $rusProduct=array();
 
 
 
 	public function __construct()
   	{
-  		$this-> addAnimals("cow",10);
-  		$this -> state(0);
-  		$this-> addAnimals("chicken",20);
-  		$this -> state(0);
-  		$this-> addNewTypeAnimal("pig","meet",[10,20], "Килограмм", "Свиней","Мясо");
-  		$this-> addAnimals("pig",10);
-  		$this -> state(1);
-
-  		$this-> passCycle(7);
-  		$this->state(1);
-
+  		//При желании можно добавить какую нить первичную инициализацию при создании объекта класса
   	}
 
   	public function state($key){
@@ -95,6 +74,15 @@ class farm
   	}
 
   	public function addNewTypeAnimal($animalName,$product, $minMax,$unit,$animalRus,$productRus){
+  		//Проверка на существование данного вида животного
+  		$exist=$this->checkExist($animalName);
+  		if($exist){
+  			echo "\n\r### Повтроная регистрация животного '".$animalName."' не нужна. ###\n\r";
+  			return;
+  		}
+
+
+  		//Если все ок, то добавляем
   		$this->animalTypes[sizeof($this->animalTypes)]=$animalName;
   		$this->arrayOfAnimals[$animalName]=array();
   		$this->productTypes[sizeof($this->productTypes)]=$product;
@@ -108,6 +96,14 @@ class farm
   		$this->rusProduct[$product]=$productRus;
   	}
   	public function addAnimals($animalName,$count){
+  		//Проверка на существование данного вида животного
+  		$exist=$this->checkExist($animalName);
+  		if(!$exist){
+  			echo "\n\r### Попытка добавить несуществующего вида животного '".$animalName."'. Сначала нужно зарегистрировать данный тип животного ###\n\r";
+  			return;
+  		}
+
+  		//Если все ок, то добавляем
   		$localArray=& $this->arrayOfAnimals[$animalName];
 
   		$lastId=end($localArray);
@@ -121,7 +117,45 @@ class farm
   			array_push($localArray, $lastId);
     	}
   	}
+  	private function checkExist($animalName){
+  		$correct=false;
+  		foreach ( $this->arrayOfAnimals as $nameOfAnimal => $value ){
+  			if($nameOfAnimal==$animalName){
+  				$correct=true;
+  				break;
+  			}
+  		}
+  		return $correct;
+  	}
 }
 $f = new farm();
 
- ?>
+//Добавление новых типов животных на ферму
+$f -> addNewTypeAnimal("cow", "milk", [8,12],"литров", "Коров","Молоко");
+$f -> addNewTypeAnimal("chicken", "egg", [0,1],"штук", "куриц","яиц");
+
+//Добавление самих животных
+$f -> addAnimals("cow",10);
+$f -> addAnimals("chicken",20);
+
+//Выводим инфо об кол.ве животных
+$f -> state(0);
+
+
+//Проводим 7 дней собирая урожай
+$f -> passCycle(7);
+
+//Выводим инфо об кол.ве собранной продукции за 7 дней
+$f -> state(1);
+
+//Добавляем на ферму еще животных(съездили на рынок)
+$f -> addAnimals("cow",1);
+$f -> addAnimals("chicken",5);
+
+//Выводим инфо об кол.ве животных
+$f -> state(0);
+
+//Снова проводим 7 дней собирая урожай и выводим результат
+$f -> passCycle(7);
+$f -> state(1);
+?>
