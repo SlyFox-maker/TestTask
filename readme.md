@@ -1,14 +1,14 @@
 # Небольшая документация по использованию #
 
-## state(int key) ##
+## state(int $key) ##
   Данная функция выводит данные об ферме в зависимости от ключа.
   * 0 - отобразить кол.во всех животных
   * 1 - отобразить кол.во продукции
 
-## passCycle(int count) ##
+## passCycle(int $count) ##
   Заставляем программу посчитать кол.во собранных продуктов за count циклов(1 цикл = 1 день)
   
-## addNewTypeAnimal(String animalName, String product, array minMax,String unit,String animalRus,String productRus) ##
+## addNewTypeAnimal(String $animalName, String $product, array $minMax,String $unit,String $animalRus,String $productRus) ##
   Добавляем новый вид животного на ферму.
   * animalName - название животного, которое добавляем(Курица, корова)
   * product    - название продукта который будет воспроизводить данное животное(яйца, молоко)
@@ -18,7 +18,7 @@
   * productRus - название продукта для вывода информации(Молоко - 10 литров)
   
   
-## addAnimals(String animalName,int count) ##
+## addAnimals(String $animalName,int $count) ##
   Добавляем на ферму уже существующий вид животного в определенных кол.вах 
-  * animanName - название уже существующего вида животного на ферме
+  * animalName - название уже существующего вида животного на ферме
   * count      - сколько животных хотим добавить
